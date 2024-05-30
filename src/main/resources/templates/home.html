@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home</title>
+</head>
+<body>
+<h1>Welcome, <span th:text="${#authentication.name}">User</span></h1>
+<form id="searchForm">
+    <input type="text" id="movieTitle" placeholder="Search for a movie..." />
+    <button type="button" onclick="searchMovies()">Search</button>
+</form>
+<div id="searchResults"></div>
+
+<h2>Your Movie Lists</h2>
+<div id="movieLists" th:each="list : ${movieLists}">
+    <h3 th:text="${list.name}">List Name</h3>
+    <ul th:each="movie : ${list.movies}">
+        <li th:text="${movie.title}">Movie Title</li>
+    </ul>
+</div>
+
+<script>
+    function searchMovies() {
+        var title = document.getElementById('movieTitle').value;
+        fetch('/api/movies/search?title=' + title)
+            .then(response => response.json())
+            .then(data => {
+                var results = document.getElementById('searchResults');
+                results.innerHTML = '';
+                data.Search.forEach(movie => {
+                    var div = document.createElement('div');
+                    div.innerHTML = '<h3>' + movie.Title + '</h3><button onclick="addToMovieList(\'' + movie.imdbID + '\')">Add to List</button>';
+                    results.appendChild(div);
+                });
+            });
+    }
+
+    function addToMovieList(imdbId) {
+        fetch('/api/movies/lists', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                imdbId: imdbId
+            })
+        }).then(response => response.json())
+            .then(data => {
+                alert('Movie added to list');
+            });
+    }
+</script>
+</body>
+</html>
