@@ -4,12 +4,19 @@
     <title>Home</title>
 </head>
 <body>
-<h1>Welcome, <span th:text="${#authentication.name}">User</span></h1>
+<h1>Welcome, <span th:text="${username}">User</span></h1>
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
 <form id="searchForm">
     <input type="text" id="movieTitle" placeholder="Search for a movie..." />
     <button type="button" onclick="searchMovies()">Search</button>
 </form>
-<div id="searchResults"></div>
+<div id="searchResults" style=" display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;"></div>
 
 <h2>Your Movie Lists</h2>
 <div id="movieLists" th:each="list : ${movieLists}">
@@ -18,7 +25,20 @@
         <li th:text="${movie.title}">Movie Title</li>
     </ul>
 </div>
+<!-- Add this form to create a new movie list -->
+<form th:action="@{/movieLists/create}" method="post">
+    <input type="text" name="name" placeholder="List name" required />
+    <label>
+        <input type="checkbox" name="isPublic" /> Public
+    </label>
+    <button type="submit">Create List</button>
+</form>
 
+<!-- Add this section to display the movie lists -->
+<div th:each="list : ${movieLists}">
+    <h2 th:text="${list.name}"></h2>
+    <a th:href="@{/movieLists/{id}(id=${list.id})}">View List</a>
+</div>
 <script>
     function searchMovies() {
         var title = document.getElementById('movieTitle').value;
@@ -29,13 +49,23 @@
                 results.innerHTML = '';
                 data.Search.forEach(movie => {
                     var div = document.createElement('div');
-                    div.innerHTML = '<h3>' + movie.Title + '</h3><button onclick="addToMovieList(\'' + movie.imdbID + '\')">Add to List</button>';
+                    div.className= 'movie';
+                    div.style = ' display: flex;\n' +
+                        '    flex-direction: column;\n' +
+                        '    margin: 20px;\n' +
+                        '    width: 300px;\n' +
+                        '    background-color: #f5f5f5;\n' +
+                        '    border-radius: 5px;\n' +
+                        '    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);';
+                    var imgUrl = movie.Poster;
+                    div.innerHTML ='<img src="'+ imgUrl +'"> <br><h3>' + movie.Title +' ('+movie.Year +')</h3><button onclick="addToMovieList(\'' + movie.imdbID + '\')">Add to List</button><br><br>';
                     results.appendChild(div);
                 });
             });
     }
 
     function addToMovieList(imdbId) {
+        console.log(imdbId)
         fetch('/api/movies/lists', {
             method: 'POST',
             headers: {
@@ -46,6 +76,7 @@
             })
         }).then(response => response.json())
             .then(data => {
+                console.log(data);
                 alert('Movie added to list');
             });
     }

@@ -1,12 +1,25 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Movie List Details</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1 th:text="${movieList.name}">List Name</h1>-->
+<!--<ul>-->
+<!--    <li th:each="movie : ${movieList.movies}" th:text="${movie.title}">Movie Title</li>-->
+<!--</ul>-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Movie List Details</title>
+    <title th:text="${movieList.name}">Movie List</title>
 </head>
 <body>
 <h1 th:text="${movieList.name}">List Name</h1>
-<ul>
-    <li th:each="movie : ${movieList.movies}" th:text="${movie.title}">Movie Title</li>
+<ul th:each="movie : ${movieList.movies}">
+    <li th:text="${movie.title}">Movie Title</li>
 </ul>
 </body>
 </html>

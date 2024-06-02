@@ -24,9 +24,9 @@ public class MovieListService {
         return movieListRepository.findByUser(user);
     }
 
-    public void saveMovieList(MovieList movieList) {
-        movieListRepository.save(movieList);
-    }
+//    public void saveMovieList(MovieList movieList) {
+//        movieListRepository.save(movieList);
+//    }
 
     public void addMovieToList(MovieList movieList, Movie movie) {
         movieList.getMovies().add(movie);
@@ -37,7 +37,11 @@ public class MovieListService {
         return movieRepository.findByImdbId(imdbId);
     }
 
-    public MovieList findById(Long listId) {
-        return movieListRepository.findById(listId).orElseThrow(() -> new NoSuchElementException("Movie list not found"));
+    public MovieList findById(Long id) {
+        return movieListRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Movie list not found"));
+    }
+
+    public void saveMovieList(MovieList movieList) {
+        movieListRepository.save(movieList);
     }
 }
