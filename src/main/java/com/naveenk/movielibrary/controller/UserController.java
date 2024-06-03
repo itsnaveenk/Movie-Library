@@ -45,16 +45,6 @@ public class UserController {
         model.addAttribute("loginError", true);
         return "login";
     }
-//    @GetMapping("/home")
-//    public String home(Model model) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth != null && auth.isAuthenticated()) {
-//            model.addAttribute("username", auth.getName());
-//            return "home";
-//        } else {
-//            return "redirect:/login";
-//        }
-//    }
 
     @GetMapping("/logout")
     public String logout() {

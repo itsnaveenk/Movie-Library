@@ -3,6 +3,8 @@ package com.naveenk.movielibrary.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
+
 @Configuration
 public class configs {
     @Bean
